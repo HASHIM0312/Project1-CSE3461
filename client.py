@@ -12,12 +12,11 @@ def receive_messages(sock: socket):
         try: 
             data = sock.recv(1024)
             if not data:
-                print ("Server closed the connection.")
+                print ("Server has shut down")
                 break
             print(f"Received broadcast message: {data.decode()}")
         except OSError:
-            print("Connection closed by server.")
-            return
+            print("Lost connection.")
 
 
 def main():
@@ -37,7 +36,7 @@ def main():
                 break
             client_socket.sendall(message.encode('utf-8'))
     except OSError:
-        print("Connection closed by server.")
+        print("Lost connection.")
     client_socket.close()
 
 

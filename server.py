@@ -7,10 +7,10 @@ HOST="" # any addresses
 
 # lock for clients as multiple clientHandler threads touch it
 clients_lock = threading.Lock()
-clients:dict[socket,tuple]= {}
+clients:list[socket]= []
 
-# boardcast messages from one client to all other clients
-def boardcast_message(msg: bytes, sender: socket):
+# broadcast messages from one client to all other clients
+def broadcast_message(msg: bytes, sender: socket):
     # store dead/error sockets
     dead:list[socket] =[] 
     with clients_lock:
@@ -19,14 +19,13 @@ def boardcast_message(msg: bytes, sender: socket):
                 if client is not sender:
                     client.sendall(msg)
             except OSError:
-                print(f"Fail to forward to {clients[client]}, closing the connection")
                 dead.append(client)
         # remove dead connections from clients
         for client in dead:
-            clients.pop(client,None)
+            clients.remove(client)
             client.close()
 
-# continuesly receive/boardcast messages from one client
+# continuesly receive/broadcast messages from one client
 def clientHandler(conn:socket):
     # record the address for staus messages
     peer = conn.getpeername()
@@ -37,14 +36,14 @@ def clientHandler(conn:socket):
             if not data:
                 break
             print(f"Received: {data.decode()} from {peer}\n")
-            boardcast_message(data,conn)
+            broadcast_message(data,conn)
     except OSError:
         pass
     finally:
         # remove a client from the list and close the connection when client disconnects
         with clients_lock:
             if conn in clients:
-                clients.pop(conn,None)
+                clients.remove(conn)
 
         print(f"Client {peer} disconnected")
         conn.close()
@@ -67,7 +66,7 @@ def main():
         print(f"Connected to {conn.getpeername()}")
         # add client to the client list
         with clients_lock:
-            clients[conn] = addr
+            clients.append(conn)
         # start a new thread to handle communication with the client
         threading.Thread(target = clientHandler, args =(conn,),daemon=True).start()
    
