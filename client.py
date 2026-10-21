@@ -14,7 +14,7 @@ def receive_messages(sock: socket):
             if not data:
                 print ("Server closed the connection.")
                 break
-            print(f"Received boardcast message: {data.decode()}")
+            print(f"Received broadcast message: {data.decode()}")
         except OSError:
             print("Connection closed by server.")
             return
