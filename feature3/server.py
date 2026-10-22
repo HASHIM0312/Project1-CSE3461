@@ -32,9 +32,15 @@ def accept_client_handler(clientSocket, username):
         if not raw:
             break
 
-        print("Recieved encrypted payload: ", raw.decode())
-        decrypted_message = decrypt_message(raw)
-        print(f"Decrypted message: {decrypted_message}") 
+        raw_str = raw.decode("utf-8")
+        if raw_str.startswith("ENC:"):
+            encrypted_message = raw_str[4:]
+            print("Recieved encrypted payload: ", encrypted_message)
+            decrypted_message = decrypt_message(encrypted_message)
+            print(f"Decrypted message: {decrypted_message}")
+        elif raw_str.startswith("RAW:"):
+            message = raw_str[4:]
+            print(f"Received unencrypted message: {message}") 
 
 
 #TODO: Decryt message function
@@ -49,8 +55,6 @@ def decrypt_message(encrypted_message_str):
     return decrypted_clean.decode("utf-8")
 
 
-#TODO: function to turn off encryption/decryption
-bool encryption
 
 
 

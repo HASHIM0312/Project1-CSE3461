@@ -36,7 +36,7 @@ def encrypt_message(message):
 
 #TODO: Function to measure latency with/without encrytion/decryption
 
-#TODO: (Low priority) Function to send a bunch of message to latency with traffic 
+#TODO: (Low priority) Function to send a bunch of messages to latency with traffic 
 
 def receive_messages(clientSocket: socket):
     while True:
@@ -81,10 +81,15 @@ def main():
             if message == "exit":
                 break
 
-            encrypted_text = encrypt_message(message)
-            encrypted_message = encrypted_text.encode('utf-8')
-            print(f"Encrypted message to send: {encrypted_text}")
-            clientSocket.send(encrypted_message)
+            encrypt_choice = input("Encrypt message? (y/n): ")
+            if encrypt_choice.lower() == 'y':
+                encrypted_text = encrypt_message(message)
+                to_send = "ENC:" + encrypted_text
+                print(f"Encrypted message to send: {encrypted_text}")
+            else:
+                to_send = "RAW:" + message
+
+            clientSocket.send(to_send.encode('utf-8'))
 
         except OSError:
             print("Connection lost")
