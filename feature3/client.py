@@ -31,12 +31,10 @@ def encrypt_message(message):
     encrypted_message = cypher.encrypt(padded_bytes)
     return base64.b64encode(encrypted_message).decode('utf-8')
 
-#TODO: function to turn off encryption/decryption
-
 
 #TODO: Function to measure latency with/without encrytion/decryption
 
-#TODO: (Low priority) Function to send a bunch of messages to latency with traffic 
+#TODO: Function to send a bunch of messages to latency with traffic 
 
 def receive_messages(clientSocket: socket):
     while True:
