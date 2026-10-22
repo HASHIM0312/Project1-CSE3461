@@ -5,14 +5,26 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from Crypto.Cipher import _mode_eax
 from Crypto.Random import get_random_bytes
+import subprocess
+import sys
 import base64
 
 serverPort = 5050
 serverName = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
+subprocess.run([sys.executable, "key_generator.py"]) # Runs key_generator
+
+def get_key_and_IV():
+    key = 0
+    IV = 0
+    with open("keyIV.txt", "rb") as f:
+        key = f.read(32)
+        IV = f.read(16)
+    
+    return key, IV
+
 
 def encrypt_message(message):
-    key = get_random_bytes(32)
-    IV = get_random_bytes(16)
+    key, IV = get_key_and_IV()
     cypher = AES.new(key, AES.MODE_EAX, IV)
     message_bytes = message.encode('utf-8')
     padded_bytes = pad(message_bytes, AES.block_size)
