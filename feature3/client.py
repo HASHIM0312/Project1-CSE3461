@@ -3,15 +3,20 @@ from socket import *
 import threading
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
-from Crypto.Cipher import _mode_eax
 from Crypto.Random import get_random_bytes
-import subprocess
 import sys
 import base64
 
 serverPort = 5050
 serverName = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
-subprocess.run([sys.executable, "key_generator.py"]) # Runs key_generator
+
+# fix: having key_generator run every time client starts,
+# a new AES key is generated. When second client connects,
+# it will overwrite the file and then the first client will
+# not be correctly decrypted. So, must run key_gen before
+# running client or server.
+
+#subprocess.run([sys.executable, "key_generator.py"]) # Runs key_generator
 
 def get_key_and_IV():
     key = 0

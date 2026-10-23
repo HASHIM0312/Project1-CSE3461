@@ -2,7 +2,6 @@ from socket import *
 import threading
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
-from Crypto.Cipher import _mode_eax
 from Crypto.Random import get_random_bytes
 import subprocess
 import sys
