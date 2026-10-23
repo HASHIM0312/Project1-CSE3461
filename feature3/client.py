@@ -7,6 +7,10 @@ from Crypto.Random import get_random_bytes
 import sys
 import base64
 
+# for testing latency of encrypted / unencrypted messages.
+import time
+import statistics
+
 serverPort = 5050
 serverName = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
 
@@ -36,8 +40,48 @@ def encrypt_message(message):
     encrypted_message = cypher.encrypt(padded_bytes)
     return base64.b64encode(encrypted_message).decode('utf-8')
 
+def benchmark(iterations=10000):
+    unenc_times = []
+    enc_times = []
 
-#TODO: Function to measure latency with/without encrytion/decryption
+    msgs = [
+            # strings of diff lengths
+                "A", "A" * 16, "A" * 1024, "A" * 4096, "A" * 128, 
+            # 128 random characters
+            "qu4xpIZWvgRsWNrizWkNcbL3zATmMcVFv7j7mynMXY8GibK704hOiuCerONOX7ROEEt7GabV0S0Kwdo5XMrZ2WutigONoz4owSK3PivuZugvKpzzHDKW32gqAb1vuYfQ"]
+
+    print(f'\nResults over {iterations} iterations:')
+
+    for message in msgs:
+        for _ in range(iterations):
+            start = time.perf_counter_ns()
+            unenc = "Unenc: " + message
+            unenc.encode("utf-8")
+            end = time.perf_counter_ns()
+
+            unenc_times.append( (end - start) / 1000000)
+
+            start = time.perf_counter_ns()
+            enc = "Enc: " + encrypt_message(message)
+            enc.encode("utf-8")
+            end = time.perf_counter_ns()
+
+            enc_times.append( (end - start) / 1000000)
+    
+        unenc_avg = statistics.mean(unenc_times)
+        enc_avg = statistics.mean(enc_times)
+
+        if message.startswith("A"):
+            print(f'\nString: "A" * {len(message)}')
+        else:
+            print(f'\nString: 128 random characters')
+
+        print(f'Without encryption: {unenc_avg:.6f} ms')
+        print(f'With encryption: {enc_avg:.6f} ms')
+        print(f'Additional time: {enc_avg - unenc_avg:.6f} ms')
+
+
+
 
 #TODO: Function to send a bunch of messages to latency with traffic 
 
@@ -83,6 +127,10 @@ def main():
             )
             if message == "exit":
                 break
+
+            if message == "benchmark":
+                benchmark()
+                continue
 
             encrypt_choice = input("Encrypt message? (y/n): ")
             if encrypt_choice.lower() == 'y':
