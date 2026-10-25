@@ -209,7 +209,6 @@ def main():
     )
     #main thread start
     receiveThread.start()
-    print("Send messages using: @username message")
     while True:
         try:
             message = input(
