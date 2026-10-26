@@ -46,18 +46,3 @@ Includes project description, and any necessary shared files
 4. Enter `exit` to disconnect.
 
 ---
-
-### Benchmarking & Latency Measurements
-Enter either command in the client message prompt:
-
-1. **`benchmark` (Client-Side Encryption Overhead)**
-   - Measures local CPU processing time over 10,000 iterations across multiple message sizes (1B to 4KB).
-   - **Client Terminal Output:** Displays average execution time (ms) without encryption, with encryption, and additional overhead.
-
-2. **`benchmark_rtt` (End-to-End Round-Trip Time)**
-   - Connects to the server, transmits payloads over TCP, and times until the server replies with `ACK` over 1,000 iterations per size.
-   - **Client Terminal Output:** Displays message size, average RTT (ms), median RTT (ms), and network encryption overhead.
-
-
-
-
