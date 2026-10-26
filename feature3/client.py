@@ -17,14 +17,6 @@ import client
 serverPort = 5050
 serverName = sys.argv[1] if len(sys.argv) > 1 else "127.0.0.1"
 
-# fix: having key_generator run every time client starts,
-# a new AES key is generated. When second client connects,
-# it will overwrite the file and then the first client will
-# not be correctly decrypted. So, must run key_gen before
-# running client or server.
-
-#subprocess.run([sys.executable, "key_generator.py"]) # Runs key_generator
-
 def get_key_and_IV():
     key = 0
     IV = 0
