@@ -17,6 +17,7 @@ def receive_messages(sock: socket):
             print(f"Received broadcast message: {data.decode()}")
         except OSError:
             print("Lost connection.")
+            break
 
 
 def main():
