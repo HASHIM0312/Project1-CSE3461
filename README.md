@@ -15,12 +15,16 @@ Client (run after server)-
     python client.py                        #for local host
     python client.py xxx.xxx.xxx.xxx        #for specific server IP
 ```
-##Feature 2 Use:
-    Server-
-        python server.py
-    Client (run after server)-
-        python client.py                        - for local host
-        python client.py xxx.xxx.xxx.xxx        - for specific server IP
+### Feature 2 Use:
+Server-
+```sh
+    python server.py
+```
+Client (run after server)-
+```sh
+    python client.py                        #for local host
+    python client.py xxx.xxx.xxx.xxx        #for specific server IP
+```
 
 ### Feature 3 Benchmarks
 
