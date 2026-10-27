@@ -39,6 +39,7 @@ def accept_client_handler(clientSocket, username):
 
             if raw_str.startswith("ENC:"):
                 encrypted_message = raw_str[4:]
+                print(f"Encrypted message: {encrypted_message}")
 
                 try:
                     decrypted_message = decrypt_message(encrypted_message)
@@ -48,6 +49,7 @@ def accept_client_handler(clientSocket, username):
                     continue
 
                 send_msg(clientSocket, "ACK")
+                print(f"Decrypted Message: {decrypted_message}")
 
             elif raw_str.startswith("RAW:"):
                 message = raw_str[4:]
@@ -64,7 +66,7 @@ def accept_client_handler(clientSocket, username):
         clientSocket.close()
         print(f"{username} disconnected")            
 
-#TODO: Decryt message function
+
 def decrypt_message(encrypted_message_str):
     key, IV = get_key_and_IV()
     encrypted_bytes = base64.b64decode(encrypted_message_str)
